@@ -1,34 +1,163 @@
-	
-<p>This is the thing {{jack}}</p>
-<ol>
-    <li>{{1+1}}</li>
-    <li>{{20-7}}</li>
-    <li>{{10*10}}</li>
-</ol>
-<ul>
-    <li>'Hello' + {{1+1}}</li>
-   <li>{{jack.length}}</li>
-   <li>{{jack.toUpperCase()}}</li>
-   <li>{{showuser()}}</li>
-   <li>{{siteUrl}}</li>
-</ul>
-<input type="text" placeholder="Name" id="nameid">
-<input type="text" bind-disabled="isdisabled" placeholder="email" id="email">
-<button type="button">Click</button>
+-------------------------------app.html-----------------------------
+
 <style>
-.success{color:greenyellow; font-size: 24px; font-weight: lighter;}
-.danger{color: red;}
-.warning{color: orange ;}
+
+  main{width: 600px; border: solid 2px #333; padding: 20px; border-radius: 20px; margin: 0 auto; background-color: lightyellow;}
+  .box {
+  margin-top: 12px;
+  padding: 16px;
+  color: white;
+  border-radius: 10px;
+  width: 250px;
+  text-align: center;
+}
+
+li{margin: 10px; padding: 10px; display: inline-block;}
+li b {}
 </style>
-<h3 [class]="issuccess">
-    Heading three
-</h3>
-<h3 [class.danger]="isdisabled">
-    Heading three
-</h3>
 
-<h3 [ngClass]="totaltext">
-    Heading three
-</h3>
 
-<h1 [style.color]="isdepend ? 'red' : 'yellow'">This New STyle Try</h1>
+<main>
+<h2>1) IF / ELSE Demo</h2>
+
+<button (click)="toggleActive()">
+  Toggle Status
+</button>
+
+<div class="box" [style.backgroundColor]="isActive ? 'green' : 'red'">
+  @if (isActive) {
+    <b>Status: Active ✅</b>
+  } @else {
+    <b>Status: Inactive ❌</b>
+  }
+</div>
+
+<hr />
+
+<h2>If - Else If Demo</h2>
+
+<!-- Buttons -->
+<button (click)="setScore(85)">Set 85</button>
+<button (click)="setScore(60)">Set 60</button>
+<button (click)="setScore(30)">Set 30</button>
+
+<!-- Output Box -->
+<div
+  style="margin-top: 15px; padding: 15px; color: white; border-radius: 10px;"
+  [style.backgroundColor]="
+    score >= 75 ? 'green' :
+    score >= 50 ? 'orange' :
+    'red'
+  "
+>
+
+  @if (score >= 75) {
+    <b>✅ Excellent! You Passed with High Score ({{ score }})</b>
+  }
+  @else if (score >= 50) {
+    <b>⚠️ Average Performance ({{ score }})</b>
+  }
+  @else {
+    <b>❌ Failed ({{ score }})</b>
+  }
+
+</div>
+
+<hr />
+
+<h2>3) SWITCH-CASE Demo</h2>
+
+<button (click)="setStatus('success')">Success</button>
+<button (click)="setStatus('warning')">Warning</button>
+<button (click)="setStatus('error')">Error</button>
+
+<div class="box" style="margin-top: 12px;"
+     [style.backgroundColor]="
+       status === 'success' ? 'green' :
+       status === 'warning' ? 'orange' :
+       status === 'error' ? 'red' : 'gray'
+     ">
+
+  @switch (status) {
+    @case ('success') {
+      <b>✅ Success: Everything is OK!</b>
+    }
+    @case ('warning') {
+      <b>⚠️ Warning: Check your input.</b>
+    }
+    @case ('error') {
+      <b>❌ Error: Something went wrong.</b>
+    }
+    @default {
+      <b>ℹ️ No status selected.</b>
+    }
+  }
+
+</div>
+
+
+<hr />
+
+<h2>4) FOR LOOP Demo</h2>
+
+<ul>
+  @for (student of students; track student.id) {
+    <li>
+      <h4>{{ student.id }}</h4>
+      <mark>{{ student.name  }}</mark> 
+       <h3>{{ student.city  }}</h3> 
+    </li> 
+         }
+  </ul>
+ </main>
+
+
+ ------------------------------app.ts-------------------------------
+
+
+ import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  templateUrl: './app.html',
+  styleUrls: ['./app.css'],
+})
+export class App {
+ 
+  isActive = false;
+
+  
+toggleActive() {
+    this.isActive = !this.isActive;
+  }
+
+  
+score = 0;
+
+  setScore(value: number) {
+    this.score = value;
+  }
+
+  
+status: 'success' | 'warning' | 'error' | 'none' = 'none';
+
+  setStatus(newStatus: 'success' | 'warning' | 'error') {
+    this.status = newStatus;
+  }
+  
+students = [
+    { id: 1, name: 'Amit', city: 'Kolkata' },
+    { id: 2, name: 'Riya', city: 'Delhi' },
+    { id: 3, name: 'John', city: 'Mumbai' },
+    { id: 4, name: 'Amit', city: 'Kochi' },
+    { id: 5, name: 'Riya', city: 'Benaras' }
+  ];
+
+  // trackBy improves performance
+  trackById(index: number, item: { id: number }) {
+    return item.id;
+  }
+
+
+}
